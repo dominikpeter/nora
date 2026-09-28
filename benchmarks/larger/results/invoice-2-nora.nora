@@ -1,0 +1,30 @@
+gross(q,unit:i)=q*unit
+discount(amount,bps:i)=amount*bps/10000
+net(amount,bps:i)=amount-amount*bps/10000
+tax(amount,bps:i)=amount*bps/10000
+total(amount,tax:i)=amount+tax
+due(total,paid:i)=total-paid
+shipping(weight,rate,base:i)=weight*rate+base
+margin(sale,cost:i)=sale-cost
+percent(part,whole:i)=part*10000/whole
+round_cent(mills:i)=(mills+5)/10
+label(amount:i)=$(amount)
+identity(value:s)=value
+%%rust
+pub fn nora_invoice(
+    lines: &[(i64, i64, i64)],
+    tax_bps: i64,
+    shipping: i64,
+    paid: i64,
+) -> String {
+    let subtotal: i64 = lines
+        .iter()
+        .map(|&(quantity, unit, discount_bps)| {
+            nora_net(nora_gross(quantity, unit), discount_bps)
+        })
+        .sum();
+    let tax = nora_tax(subtotal, tax_bps);
+    let total = subtotal + tax + shipping;
+    let due = nora_due(total, paid);
+    format!("subtotal={subtotal};tax={tax};shipping={shipping};total={total};due={due}")
+}

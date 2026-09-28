@@ -20,6 +20,41 @@ label(a,b:i)=$(a+b)
 
 ## Measured results
 
+### Larger programs: mixed results
+
+![Larger-program benchmark](docs/images/larger-benchmark.svg)
+
+Eight live calls: two trials per language on two larger modules, using
+`gpt-6-astra` at medium effort and a **103-token instruction**. All eight answers
+passed all five external checks for their task. No repairs or tool use occurred.
+
+| Task | Rust prompt + source | Nora prompt + source | Result |
+| --- | ---: | ---: | --- |
+| Invoice module | 878.5 | 790 | Nora uses 10.1% fewer |
+| Inventory processor | 1,049 | 1,159.5 | Nora uses 10.5% more |
+
+Values are means using `o200k_base`, including the Nora instruction. The invoice
+contains twelve compact helpers plus Rust aggregation. The inventory needs
+parsing, validation, maps, sorting, and reporting; both Nora answers used entirely
+verbatim Rust. Larger source alone does not guarantee savings.
+
+| Task | Rust provider input + output | Nora provider input + output |
+| --- | ---: | ---: |
+| Invoice | 20,142.5 | 20,085.5 |
+| Inventory | 20,378.5 | 20,428.5 |
+
+These provider totals include CLI system context and reported reasoning. Overall,
+the difference is negligible, **not a demonstrated end-to-end efficiency win**.
+Cached inputs are included once; these are token counts, not monetary costs.
+Two trials per condition remain a small pilot, and these are modules rather than
+full applications. Model alias is fixed but its underlying snapshot is not.
+[Tasks, method, and tests](benchmarks/larger/README.md) ·
+[Exact prompts, outputs, and usage](benchmarks/larger/results/).
+
+Run `just setup-tokens` then `just bench-larger` to repeat (eight live calls).
+
+### Initial onboarding pilot
+
 ![Live AI guide benchmark](docs/images/ai-guide-benchmark.svg)
 
 We ran four fresh Codex CLI sessions on the same five-function task, then
@@ -88,6 +123,7 @@ just bench         # five Rust/Nora compatibility cases
 just setup-tokens  # optional tokenizer environment
 just tokens        # source syntax comparison
 just bench-ai      # THREE LIVE MODEL CALLS; requires authenticated Codex
+just bench-larger  # EIGHT LIVE MODEL CALLS; larger modules, paired trials
 just graphs        # regenerate graph from committed pilot results
 ```
 

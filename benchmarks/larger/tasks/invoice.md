@@ -1,0 +1,27 @@
+Build an integer-cent invoicing library, standard library only. Emit source only,
+without Markdown fences, comments, tests or main. Do not use tools or read files.
+All functions below must be pub with the exact generated Rust names. All numeric
+parameters and returns are i64 unless stated. All inputs are nonnegative and
+intermediate arithmetic fits i64. Division truncates toward zero; basis points
+use a denominator of 10000. Helper parameters are listed in order.
+
+nora_gross(q,unit): q*unit.
+nora_discount(amount,bps): amount*bps/10000.
+nora_net(amount,bps): amount minus amount*bps/10000.
+nora_tax(amount,bps): amount*bps/10000.
+nora_total(amount,tax): amount+tax.
+nora_due(total,paid): total-paid (this may be negative).
+nora_shipping(weight,rate,base): weight*rate+base.
+nora_margin(sale,cost): sale-cost (may be negative).
+nora_percent(part,whole): part*10000/whole; whole is positive.
+nora_round_cent(mills): (mills+5)/10.
+nora_label(amount)->String: decimal amount.
+nora_identity(value:String)->String: return the owned string unchanged.
+
+Also implement pub fn nora_invoice(lines: &[(i64,i64,i64)], tax_bps:i64,
+shipping:i64, paid:i64) -> String. Each tuple is (quantity, unit cents,
+discount basis points). Compute each gross, subtract its individually truncated
+discount, and sum net line amounts. Tax applies to that net subtotal only,
+not shipping. Total = subtotal+tax+shipping; due=total-paid. Return exactly
+"subtotal=SUB;tax=TAX;shipping=SHIP;total=TOTAL;due=DUE" using decimal integers,
+no trailing newline. Empty lines yield zero subtotal and zero tax.

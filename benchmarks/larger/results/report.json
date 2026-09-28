@@ -1,0 +1,212 @@
+{
+  "kind": "larger_paired_pilot",
+  "model": "gpt-6-astra",
+  "effort": "medium",
+  "cli": "codex-cli 0.158.0",
+  "trials_per_condition_per_task": 2,
+  "repair_budget": 0,
+  "guide_tokens_o200k_base": 103,
+  "guide_sha256": "ea50a416d30920a1a3eac0b5c50ac2386b71eeb6f26967db786748fa2fead028",
+  "results": [
+    {
+      "task": "invoice",
+      "trial": 1,
+      "language": "rs",
+      "task_sha256": "c7a78f1e2fc5f2fdf145df989b2ddb12790632a2b1d65b99c2cd10ea8134a14f",
+      "checks_sha256": "be615df016efdea871101b2369f25376b22572b87e6d87000e87a7ed89da07c4",
+      "prompt_tokens_o200k_base": 401,
+      "usage": [
+        {
+          "input_tokens": 19669,
+          "cached_input_tokens": 12288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 482,
+          "reasoning_output_tokens": 0
+        }
+      ],
+      "source_tokens_o200k_base": 478,
+      "prompt_plus_source_tokens": 879,
+      "tool_events": 0,
+      "rust_escape": false,
+      "compact_source_tokens_o200k_base": 0,
+      "status": "pass",
+      "diagnostics": "\nrunning 5 tests\ntest guide_checks::empty_and_overpaid ... ok\ntest guide_checks::helpers ... ok\ntest guide_checks::tax_excludes_shipping ... ok\ntest guide_checks::per_line_rounding ... ok\ntest guide_checks::mixed_lines ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "elapsed_seconds": 20.32
+    },
+    {
+      "task": "invoice",
+      "trial": 1,
+      "language": "nora",
+      "task_sha256": "c7a78f1e2fc5f2fdf145df989b2ddb12790632a2b1d65b99c2cd10ea8134a14f",
+      "checks_sha256": "be615df016efdea871101b2369f25376b22572b87e6d87000e87a7ed89da07c4",
+      "prompt_tokens_o200k_base": 505,
+      "usage": [
+        {
+          "input_tokens": 19757,
+          "cached_input_tokens": 12288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 333,
+          "reasoning_output_tokens": 45
+        }
+      ],
+      "source_tokens_o200k_base": 282,
+      "prompt_plus_source_tokens": 787,
+      "tool_events": 0,
+      "rust_escape": true,
+      "compact_source_tokens_o200k_base": 133,
+      "status": "pass",
+      "diagnostics": "\nrunning 5 tests\ntest guide_checks::helpers ... ok\ntest guide_checks::empty_and_overpaid ... ok\ntest guide_checks::mixed_lines ... ok\ntest guide_checks::per_line_rounding ... ok\ntest guide_checks::tax_excludes_shipping ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "elapsed_seconds": 16.37
+    },
+    {
+      "task": "invoice",
+      "trial": 2,
+      "language": "nora",
+      "task_sha256": "c7a78f1e2fc5f2fdf145df989b2ddb12790632a2b1d65b99c2cd10ea8134a14f",
+      "checks_sha256": "be615df016efdea871101b2369f25376b22572b87e6d87000e87a7ed89da07c4",
+      "prompt_tokens_o200k_base": 505,
+      "usage": [
+        {
+          "input_tokens": 19757,
+          "cached_input_tokens": 12288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 324,
+          "reasoning_output_tokens": 30
+        }
+      ],
+      "source_tokens_o200k_base": 288,
+      "prompt_plus_source_tokens": 793,
+      "tool_events": 0,
+      "rust_escape": true,
+      "compact_source_tokens_o200k_base": 133,
+      "status": "pass",
+      "diagnostics": "\nrunning 5 tests\ntest guide_checks::empty_and_overpaid ... ok\ntest guide_checks::mixed_lines ... ok\ntest guide_checks::tax_excludes_shipping ... ok\ntest guide_checks::helpers ... ok\ntest guide_checks::per_line_rounding ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "elapsed_seconds": 15.11
+    },
+    {
+      "task": "invoice",
+      "trial": 2,
+      "language": "rs",
+      "task_sha256": "c7a78f1e2fc5f2fdf145df989b2ddb12790632a2b1d65b99c2cd10ea8134a14f",
+      "checks_sha256": "be615df016efdea871101b2369f25376b22572b87e6d87000e87a7ed89da07c4",
+      "prompt_tokens_o200k_base": 401,
+      "usage": [
+        {
+          "input_tokens": 19653,
+          "cached_input_tokens": 12288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 481,
+          "reasoning_output_tokens": 0
+        }
+      ],
+      "source_tokens_o200k_base": 477,
+      "prompt_plus_source_tokens": 878,
+      "tool_events": 0,
+      "rust_escape": false,
+      "compact_source_tokens_o200k_base": 0,
+      "status": "pass",
+      "diagnostics": "\nrunning 5 tests\ntest guide_checks::empty_and_overpaid ... ok\ntest guide_checks::helpers ... ok\ntest guide_checks::mixed_lines ... ok\ntest guide_checks::tax_excludes_shipping ... ok\ntest guide_checks::per_line_rounding ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "elapsed_seconds": 21.19
+    },
+    {
+      "task": "inventory",
+      "trial": 1,
+      "language": "rs",
+      "task_sha256": "ea23ab167a128113ba2e1e9f176fc156da2d09460b4675d7423e3e0f361f2667",
+      "checks_sha256": "4512fb8868e62432b9f3a42ba402183349495efaee2300d69d889079d4a29155",
+      "prompt_tokens_o200k_base": 442,
+      "usage": [
+        {
+          "input_tokens": 19692,
+          "cached_input_tokens": 12288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 709,
+          "reasoning_output_tokens": 99
+        }
+      ],
+      "source_tokens_o200k_base": 604,
+      "prompt_plus_source_tokens": 1046,
+      "tool_events": 0,
+      "rust_escape": false,
+      "compact_source_tokens_o200k_base": 0,
+      "status": "pass",
+      "diagnostics": "\nrunning 5 tests\ntest guide_checks::parse_merge_sort ... ok\ntest guide_checks::empty_and_negative_threshold ... ok\ntest guide_checks::validation_order ... ok\ntest guide_checks::report_sort_threshold_immutable ... ok\ntest guide_checks::duplicates_and_overflow ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "elapsed_seconds": 26.13
+    },
+    {
+      "task": "inventory",
+      "trial": 1,
+      "language": "nora",
+      "task_sha256": "ea23ab167a128113ba2e1e9f176fc156da2d09460b4675d7423e3e0f361f2667",
+      "checks_sha256": "4512fb8868e62432b9f3a42ba402183349495efaee2300d69d889079d4a29155",
+      "prompt_tokens_o200k_base": 546,
+      "usage": [
+        {
+          "input_tokens": 19796,
+          "cached_input_tokens": 18304,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 620,
+          "reasoning_output_tokens": 0
+        }
+      ],
+      "source_tokens_o200k_base": 616,
+      "prompt_plus_source_tokens": 1162,
+      "tool_events": 0,
+      "rust_escape": true,
+      "compact_source_tokens_o200k_base": 0,
+      "status": "pass",
+      "diagnostics": "\nrunning 5 tests\ntest guide_checks::duplicates_and_overflow ... ok\ntest guide_checks::parse_merge_sort ... ok\ntest guide_checks::empty_and_negative_threshold ... ok\ntest guide_checks::validation_order ... ok\ntest guide_checks::report_sort_threshold_immutable ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "elapsed_seconds": 24.32
+    },
+    {
+      "task": "inventory",
+      "trial": 2,
+      "language": "nora",
+      "task_sha256": "ea23ab167a128113ba2e1e9f176fc156da2d09460b4675d7423e3e0f361f2667",
+      "checks_sha256": "4512fb8868e62432b9f3a42ba402183349495efaee2300d69d889079d4a29155",
+      "prompt_tokens_o200k_base": 546,
+      "usage": [
+        {
+          "input_tokens": 19796,
+          "cached_input_tokens": 12288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 645,
+          "reasoning_output_tokens": 28
+        }
+      ],
+      "source_tokens_o200k_base": 611,
+      "prompt_plus_source_tokens": 1157,
+      "tool_events": 0,
+      "rust_escape": true,
+      "compact_source_tokens_o200k_base": 0,
+      "status": "pass",
+      "diagnostics": "\nrunning 5 tests\ntest guide_checks::empty_and_negative_threshold ... ok\ntest guide_checks::duplicates_and_overflow ... ok\ntest guide_checks::validation_order ... ok\ntest guide_checks::parse_merge_sort ... ok\ntest guide_checks::report_sort_threshold_immutable ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "elapsed_seconds": 25.68
+    },
+    {
+      "task": "inventory",
+      "trial": 2,
+      "language": "rs",
+      "task_sha256": "ea23ab167a128113ba2e1e9f176fc156da2d09460b4675d7423e3e0f361f2667",
+      "checks_sha256": "4512fb8868e62432b9f3a42ba402183349495efaee2300d69d889079d4a29155",
+      "prompt_tokens_o200k_base": 442,
+      "usage": [
+        {
+          "input_tokens": 19692,
+          "cached_input_tokens": 12288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 664,
+          "reasoning_output_tokens": 48
+        }
+      ],
+      "source_tokens_o200k_base": 610,
+      "prompt_plus_source_tokens": 1052,
+      "tool_events": 0,
+      "rust_escape": false,
+      "compact_source_tokens_o200k_base": 0,
+      "status": "pass",
+      "diagnostics": "\nrunning 5 tests\ntest guide_checks::parse_merge_sort ... ok\ntest guide_checks::duplicates_and_overflow ... ok\ntest guide_checks::empty_and_negative_threshold ... ok\ntest guide_checks::report_sort_threshold_immutable ... ok\ntest guide_checks::validation_order ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "elapsed_seconds": 25.63
+    }
+  ]
+}

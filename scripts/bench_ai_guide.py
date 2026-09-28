@@ -11,7 +11,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 FIXTURES = ROOT / 'benchmarks/ai-guide'
 
 
-def score(source, language, work):
+def score(source, language, work, checks_file=None):
     path = work / ('candidate.' + language)
     path.write_text(source)
     try:
@@ -21,7 +21,7 @@ def score(source, language, work):
                 return {'status': 'nora_failed', 'diagnostics': compiled.stderr}
             source = compiled.stdout
         rust = work / 'checked.rs'
-        rust.write_text(source + '\n' + (FIXTURES / 'checks.rs').read_text())
+        rust.write_text(source + '\n' + (checks_file or FIXTURES / 'checks.rs').read_text())
         binary = work / 'checks'
         compiled = subprocess.run(['rustc', '--edition=2024', '--test', str(rust), '-o', str(binary)], capture_output=True, text=True, timeout=20)
         if compiled.returncode:

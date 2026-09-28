@@ -66,7 +66,12 @@ bench-ai:
 # Regenerate the README graph from the committed live-pilot report.
 graphs:
     python3 scripts/plot_benchmark.py
+    python3 scripts/plot_larger_benchmark.py
 
 # Print the embedded AI reference followed by a task file.
 prompt task:
     @cargo run --quiet -- --prompt "{{task}}"
+
+# Run paired larger-program trials (8 live model calls by default).
+bench-larger trials="2":
+    target/token-env/bin/python scripts/bench_larger.py --live --trials "{{trials}}"

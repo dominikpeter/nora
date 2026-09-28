@@ -1,0 +1,33 @@
+Write Nora v0.1.
+Nora: one function/line, omit fn, i=i64,s=String; f(a,b:i)=expr infers return. $(expr)=to_string(). Exports gain pub nora_; use unprefixed names in compact definitions. Compact bodies support only parameters, integer literals, parentheses, unary -, arithmetic + - * / %, and string conversion. No compact function calls. For anything else, put %%rust on its own line then ordinary Rust to EOF, preserving required names. Emit source only.
+
+Build an inventory text processor using only the Rust standard library. Emit
+source only, without Markdown fences, comments, tests or main. Do not use tools
+or read files. Required public interface:
+#[derive(Debug, PartialEq, Eq)]
+pub struct Stock { pub sku: String, pub quantity: i64, pub unit_cents: i64 }
+pub fn nora_parse(input: &str) -> Result<Vec<Stock>, String>
+pub fn nora_report(items: &[Stock], threshold: i64) -> String
+
+Parser rules, in order:
+- Iterate input.lines(), retaining original 1-based line numbers. Trim lines;
+  ignore empty lines and lines starting with # after trimming.
+- Each remaining line has exactly three comma-separated fields; trim each.
+  Wrong field count returns "line N: fields".
+- SKU must be nonempty and contain only ASCII letters, digits, '-' or '_'.
+  Invalid SKU returns "line N: sku". SKUs are case-sensitive.
+- Quantity parses with Rust i64::from_str and must be >=0; invalid or overflow
+  returns "line N: quantity". Unit cents has the same rule, with error
+  "line N: price". Validate quantity before price.
+- Repeated SKU rows must have the same price, otherwise "line N: price conflict".
+  With matching price, add quantities with checked_add; overflow returns
+  "line N: quantity overflow".
+- Stop at first error. Return one Stock per SKU, sorted lexicographically by SKU.
+  Input may contain CRLF. No CSV quoting/header support is needed.
+
+Report rules: input can be unsorted and contains unique SKUs, nonnegative
+quantities/prices, and all value arithmetic fits i64. Sort rows by SKU, without
+mutating the input. For each row produce "SKU:QUANTITY:VALUE:STATE", with
+VALUE=quantity*unit_cents and STATE="low" iff quantity<threshold, else "ok".
+Join rows with newlines, then append "total=SUM" as a final line; no trailing
+newline. Empty inventory returns "total=0".

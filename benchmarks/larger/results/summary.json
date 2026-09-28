@@ -1,0 +1,42 @@
+[
+  {
+    "task": "invoice",
+    "language": "rs",
+    "passed": 2,
+    "trials": 2,
+    "mean_source_tokens": 477.5,
+    "mean_prompt_plus_source_tokens": 878.5,
+    "mean_provider_input_plus_output_tokens": 20142.5,
+    "mean_reasoning_output_tokens": 0
+  },
+  {
+    "task": "invoice",
+    "language": "nora",
+    "passed": 2,
+    "trials": 2,
+    "mean_source_tokens": 285,
+    "mean_prompt_plus_source_tokens": 790,
+    "mean_provider_input_plus_output_tokens": 20085.5,
+    "mean_reasoning_output_tokens": 37.5
+  },
+  {
+    "task": "inventory",
+    "language": "rs",
+    "passed": 2,
+    "trials": 2,
+    "mean_source_tokens": 607,
+    "mean_prompt_plus_source_tokens": 1049,
+    "mean_provider_input_plus_output_tokens": 20378.5,
+    "mean_reasoning_output_tokens": 73.5
+  },
+  {
+    "task": "inventory",
+    "language": "nora",
+    "passed": 2,
+    "trials": 2,
+    "mean_source_tokens": 613.5,
+    "mean_prompt_plus_source_tokens": 1159.5,
+    "mean_provider_input_plus_output_tokens": 20428.5,
+    "mean_reasoning_output_tokens": 14
+  }
+]
