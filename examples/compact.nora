@@ -1,0 +1,10 @@
+text(x:i)=$x
+add(a,b:i)=a+b
+%%rust
+fn main() {
+    let values = [1, 2, 3];
+    let total: i64 = values.iter().sum();
+    assert_eq!(nora_add(total, 4), 10);
+    assert_eq!(nora_text(total), "6");
+    println!("{}", nora_text(total));
+}

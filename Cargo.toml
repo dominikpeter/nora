@@ -1,0 +1,10 @@
+[package]
+name = "nora"
+version = "0.1.0"
+edition = "2024"
+description = "Experimental AI-native compact syntax compiling to Rust"
+repository = "https://github.com/dominikpeter/nora"
+readme = "README.md"
+include = ["src/**", "tests/**", "examples/**", "scripts/*.py", "benchmarks/**", "docs/**", "README.md", "AGENTS.md", "requirements-bench.txt", ".github/workflows/**", "Cargo.toml", "Cargo.lock"]
+
+[dependencies]

@@ -1,0 +1,2 @@
+# Optional: source token measurements, not needed for the compiler or behavioral checks.
+tiktoken==0.13.0
