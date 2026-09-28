@@ -218,6 +218,23 @@ The tokenizer is only needed for this experiment, not for compiling Nora.
 
 ## Development
 
+With [just](https://github.com/casey/just) installed, run `just` to list commands:
+
+```sh
+just check         # tests, formatting, lint, and benchmark fixtures
+just demo          # compile and run the example
+just emit          # inspect generated Rust
+just bench         # benchmark fixtures and JSON report
+just setup-tokens  # install optional tokenizer into target/token-env
+just tokens        # compare syntax token counts
+just package       # verify a source package from a clean checkout
+```
+
+`just build`, `just install`, `just test`, `just lint`, and `just fmt` are also
+available. The demo and tokenizer-environment recipes use Unix paths. The
+underlying commands below work without just.
+
+
 ```sh
 cargo test
 cargo fmt --check

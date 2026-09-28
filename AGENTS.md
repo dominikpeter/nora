@@ -28,7 +28,8 @@ For releases, read docs/release-0.1.0.md and inspect Cargo.toml packaging entrie
 
 ## Verification
 
-From the repository root:
+From the repository root, `just check` runs the checks below. Use `just` to list
+other recipes. Without just:
 
 ```sh
 cargo test
