@@ -50,3 +50,47 @@ fn rust_files_pass_through_unchanged() {
     assert!(output.status.success());
     assert_eq!(output.stdout, source.as_bytes());
 }
+
+#[test]
+fn embedded_guide_and_task_prompt_work_outside_the_repository() {
+    let dir = std::env::temp_dir().join(format!("nora-prompt-{}", std::process::id()));
+    std::fs::create_dir_all(&dir).unwrap();
+    let reference = Command::new(env!("CARGO_BIN_EXE_nora"))
+        .arg("--ai-reference")
+        .current_dir(&dir)
+        .output()
+        .unwrap();
+    assert!(reference.status.success());
+    assert_eq!(reference.stdout, include_bytes!("../docs/ai-primer.md"));
+    let full = Command::new(env!("CARGO_BIN_EXE_nora"))
+        .arg("--ai-reference-full")
+        .current_dir(&dir)
+        .output()
+        .unwrap();
+    assert!(full.status.success());
+    assert_eq!(full.stdout, include_bytes!("../docs/ai-reference.md"));
+    std::fs::write(dir.join("task.txt"), "Create integer addition.").unwrap();
+    let prompt = Command::new(env!("CARGO_BIN_EXE_nora"))
+        .args(["--prompt", "task.txt"])
+        .current_dir(&dir)
+        .output()
+        .unwrap();
+    assert!(prompt.status.success());
+    let prompt = String::from_utf8(prompt.stdout).unwrap();
+    assert!(prompt.starts_with(include_str!("../docs/ai-primer.md")));
+    assert!(prompt.ends_with("Create integer addition.\n"));
+    for args in [
+        vec!["--prompt"],
+        vec!["--prompt", "missing.txt"],
+        vec!["--ai-reference", "extra"],
+    ] {
+        let result = Command::new(env!("CARGO_BIN_EXE_nora"))
+            .args(args)
+            .current_dir(&dir)
+            .output()
+            .unwrap();
+        assert!(!result.status.success());
+        assert!(result.stdout.is_empty());
+    }
+    std::fs::remove_dir_all(dir).unwrap();
+}

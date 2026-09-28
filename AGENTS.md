@@ -7,6 +7,9 @@ full Rust expressiveness, and deterministic expansion without changing meaning.
 Treat compact syntax coverage, Rust passthrough compatibility, and model success
 as separate measurements. Full compact Rust coverage is a goal, not current status.
 
+For writing or repairing Nora programs, read docs/ai-primer.md (`just ai`).
+For unsupported syntax or repair details, read docs/ai-reference.md.
+
 ## Before changing code
 
 Read README.md for supported syntax and limitations. The compiler is a small,
@@ -35,7 +38,7 @@ other recipes. Without just:
 cargo test
 cargo fmt --check
 cargo clippy --all-targets -- -D warnings
-python3 -m unittest discover -s scripts -p 'test_benchmark.py'
+python3 -m unittest discover -s scripts -p 'test_*.py'
 python3 scripts/bench_smoke.py
 ```
 

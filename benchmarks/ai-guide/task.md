@@ -1,0 +1,10 @@
+Implement these five functions. Return only source, without Markdown fences,
+comments, tests, main, or explanations. Do not use tools, read files, or run code.
+
+Required generated Rust interfaces and behavior:
+- pub fn nora_offset(x: i64, delta: i64) -> i64: x + delta.
+- pub fn nora_total(q: i64, price: i64, discount: i64) -> i64: q * price - discount.
+- pub fn nora_label(a: i64, b: i64) -> String: decimal representation of a + b.
+- pub fn nora_identity(x: String) -> String: return x unchanged, transferring ownership.
+- pub fn nora_bucket(x: i64, width: i64) -> i64: (x + 3) / width, truncating toward zero.
+Assume arithmetic does not overflow and width is nonzero.

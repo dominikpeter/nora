@@ -1,0 +1,5 @@
+offset(x,delta:i)->i=x+delta
+total(q,price,discount:i)->i=q*price-discount
+label(a,b:i)->s=$(a+b)
+identity(x:s)->s=x
+bucket(x,width:i)->i=(x+3)/width

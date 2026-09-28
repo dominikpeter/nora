@@ -14,5 +14,5 @@ jobs:
       - run: cargo test
       - run: cargo fmt --check
       - run: cargo clippy --all-targets -- -D warnings
-      - run: python3 -m unittest discover -s scripts -p 'test_benchmark.py'
+      - run: python3 -m unittest discover -s scripts -p 'test_*.py'
       - run: python3 scripts/bench_smoke.py

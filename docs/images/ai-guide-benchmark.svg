@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="570" viewBox="0 0 880 570" role="img" aria-label="Live pilot: Rust passed at 131 source tokens; unguided Nora failed at 126; guided Nora passed at 55; short-primer Nora passed at 50. Guide overhead increases total prompt plus source tokens.">
+<rect width="880" height="570" rx="16" fill="#101820"/>
+<g font-family="Arial, sans-serif" fill="#e8edf2">
+<text x="30" y="40" font-size="26" fill="#e8edf2">Can an AI write Nora?</text>
+<text x="30" y="66" font-size="14" fill="#b8c5d1">Live Codex pilot · one trial per condition · five related functions</text>
+<text x="30" y="108" font-size="17" fill="#e8edf2">Generated source tokens</text>
+<text x="30" y="150" font-size="14" fill="#e8edf2">Rust</text>
+<rect x="205" y="133" width="393.0" height="23" rx="4" fill="#799bc7"/>
+<text x="608.0" y="150" font-size="14" fill="#e8edf2">131 · 5/5 passed</text>
+<text x="30" y="187" font-size="14" fill="#e8edf2">Nora · no guide</text>
+<rect x="205" y="170" width="378.0" height="23" rx="4" fill="#b08080"/>
+<text x="593.0" y="187" font-size="14" fill="#e8edf2">126 · compile failed</text>
+<text x="30" y="224" font-size="14" fill="#e8edf2">Nora · full guide</text>
+<rect x="205" y="207" width="165.0" height="23" rx="4" fill="#45d9ad"/>
+<text x="380.0" y="224" font-size="14" fill="#e8edf2">55 · 5/5 passed</text>
+<text x="30" y="261" font-size="14" fill="#e8edf2">Nora · short primer</text>
+<rect x="205" y="244" width="150.0" height="23" rx="4" fill="#45d9ad"/>
+<text x="365.0" y="261" font-size="14" fill="#e8edf2">50 · 5/5 passed</text>
+<text x="30" y="313" font-size="17" fill="#e8edf2">Prompt + source tokens (local text only)</text>
+<text x="30" y="355" font-size="14" fill="#e8edf2">Rust</text>
+<rect x="205" y="338" width="169.5" height="23" rx="4" fill="#799bc7"/>
+<text x="384.52" y="355" font-size="14" fill="#e8edf2">326 · 5/5 passed</text>
+<text x="30" y="392" font-size="14" fill="#e8edf2">Nora · no guide</text>
+<rect x="205" y="375" width="171.6" height="23" rx="4" fill="#b08080"/>
+<text x="386.6" y="392" font-size="14" fill="#e8edf2">330 · compile failed</text>
+<text x="30" y="429" font-size="14" fill="#e8edf2">Nora · full guide</text>
+<rect x="205" y="412" width="397.3" height="23" rx="4" fill="#45d9ad"/>
+<text x="612.28" y="429" font-size="14" fill="#e8edf2">764 · 5/5 passed</text>
+<text x="30" y="466" font-size="14" fill="#e8edf2">Nora · short primer</text>
+<rect x="205" y="449" width="210.6" height="23" rx="4" fill="#45d9ad"/>
+<text x="425.6" y="466" font-size="14" fill="#e8edf2">405 · 5/5 passed</text>
+<text x="30" y="525" font-size="13" fill="#b8c5d1">Guides: 505 → 151 tokens. Tokenizer: o200k_base. Model identity not pinned.</text>
+<text x="30" y="548" font-size="13" fill="#b8c5d1">Small onboarding experiment; not evidence of general Rust coverage or lower total agent cost.</text>
+</g></svg>

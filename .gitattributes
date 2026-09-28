@@ -1,0 +1,3 @@
+# Frozen model inputs preserve exact whitespace for token-count reproducibility.
+benchmarks/ai-guide/results/**/guide.md -whitespace
+benchmarks/ai-guide/results/**/*.prompt.txt -whitespace

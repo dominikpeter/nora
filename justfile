@@ -13,7 +13,7 @@ install:
 # Run compiler and benchmark-runner tests.
 test:
     cargo test
-    python3 -m unittest discover -s scripts -p 'test_benchmark.py'
+    python3 -m unittest discover -s scripts -p 'test_*.py'
 
 # Check Rust formatting and lint warnings.
 lint:
@@ -54,3 +54,19 @@ tokens:
 # Build and verify the source package from a clean checkout.
 package:
     cargo package
+
+# Print the compact reference to give an AI before it writes Nora.
+ai:
+    @cargo run --quiet -- --ai-reference
+
+# Run three live Codex trials (uses model access; run setup-tokens first).
+bench-ai:
+    target/token-env/bin/python scripts/bench_ai_guide.py --live
+
+# Regenerate the README graph from the committed live-pilot report.
+graphs:
+    python3 scripts/plot_benchmark.py
+
+# Print the embedded AI reference followed by a task file.
+prompt task:
+    @cargo run --quiet -- --prompt "{{task}}"

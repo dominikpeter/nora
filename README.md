@@ -1,61 +1,146 @@
 # Nora
 
-**An experiment in a new AI-native coding language: compact source that translates directly to Rust.**
+**Ugly syntax. Precise Rust. Fewer tokens.**
 
-Nora explores whether AI coding agents can read, write, and edit programs with
-fewer tokens by using a small, predictable syntax. The compiler is written in
-Rust and emits ordinary Rust source. Rust's compiler handles native compilation.
-
-```text
-add(a,b:i)=a+b
-text(x:i)=$x
-price(q,p,discount:i)=q*p-discount
-```
-
-This is an early prototype, not a production-ready language. Source-token savings
-are measurable on the examples below; better AI coding cost and correctness are
-still hypotheses to test.
-
-## Intention
-
-The goal is to give AI agents a concise way to express Rust programs while keeping
-the translation deterministic and inspectable:
-
-- Remove repeated boilerplate and type annotations where the meaning is clear.
-- Choose syntax using actual tokenizer measurements, not character counts.
-- Preserve Rust behavior as supported constructs expand into Rust.
-- Keep access to ordinary Rust for features the compact language cannot express yet.
-- Measure the entire coding loop: instructions, generation, errors, and repairs.
-
-Nora does not need an AI model to compile. The AI writes Nora; a normal compiler
-translates it.
+An experimental AI-native coding language written in Rust. Nora explores a compact
+representation that AI agents can learn from a short reference and compile into
+ordinary Rust. Human readability is optional. Preserving program meaning is not.
 
 ```text
-Nora source → parsing and type checking → Rust source → rustc → native code
+offset(x,delta:i)=x+delta
+total(q,price,discount:i)=q*price-discount
+label(a,b:i)=$(a+b)
 ```
 
-## Nora vs. Rust
+[Try it](#try-it) · [AI reference](docs/ai-reference.md) · [Benchmarks](#measured-results) · [v0.1.0 release](https://github.com/dominikpeter/nora/releases/tag/v0.1.0)
 
-These examples work today. The Rust column shows equivalent code with ordinary
-names for readability.
+> **Early experiment.** Full compact Rust coverage is the goal. Today, compact
+> functions support integers, strings, and arithmetic; other Rust features use
+> verbatim passthrough. AI readiness is measured, not assumed.
 
-| Nora | Equivalent Rust |
+## Measured results
+
+![Live AI guide benchmark](docs/images/ai-guide-benchmark.svg)
+
+We ran four fresh Codex CLI sessions on the same five-function task, then
+compiled and executed the answers against external behavioral checks. No repairs
+or tool use occurred in these trials.
+
+| Condition | Result | Source tokens | Local prompt tokens |
+| --- | --- | ---: | ---: |
+| Rust | 5/5 checks passed | 131 | 195 |
+| Nora without a guide | Failed to compile | 126 | 204 |
+| Nora with the full AI reference | 5/5 checks passed | 55 | 709 |
+| Nora with the short primer | 5/5 checks passed | 50 | 355 |
+
+**The short primer used 70% fewer instruction tokens (151 vs. 505)** and the model
+still passed all five checks. Its 50 source tokens were **62% fewer than Rust's
+131**. Neither guided answer used Rust passthrough. Without a guide, the model
+guessed invalid syntax.
+
+Prompt plus source decreased from **764 with the full guide to 405 with the
+primer**, but Rust still used fewer at **326**. These are small onboarding
+results, not evidence of lower total agent cost.
+
+The CLI reported the following usage, including its system context:
+
+| Condition | Input tokens | Cached input (subset) | Output tokens | Reasoning output (subset) |
+| --- | ---: | ---: | ---: | ---: |
+| Rust | 19,445 | 12,288 | 135 | 0 |
+| Nora without a guide | 19,454 | 12,288 | 604 | 472 |
+| Nora with the full guide | 19,961 | 12,288 | 59 | 0 |
+| Nora with the short primer | 19,619 | 12,288 | 54 | 0 |
+
+Source and local prompt counts use `o200k_base`; API usage comes from CLI events.
+One trial per condition, five small related functions, Codex CLI 0.158.0 with its
+default model (identity not pinned). Tasks overlap concepts taught by the guide.
+These results do not establish generalization, statistical reliability, or 100%
+AI correctness. [Initial report](benchmarks/ai-guide/results/initial/) · [Primer report](benchmarks/ai-guide/results/primer/)
+· [Method and reproduction](benchmarks/ai-guide/README.md).
+
+## Try it
+
+Requires Git and a recent stable Rust toolchain with edition 2024 support.
+Install Rust using [rustup](https://www.rust-lang.org/tools/install) if needed.
+Nora itself has no third-party Rust dependencies.
+
+```sh
+git clone https://github.com/dominikpeter/nora.git
+cd nora
+cargo install --path .
+mkdir -p target/demo
+nora examples/compact.nora > target/demo/compact.rs
+rustc --edition=2024 target/demo/compact.rs -o target/demo/compact
+./target/demo/compact
+```
+
+Output: `6`. Ensure Cargo's binary directory (normally `~/.cargo/bin`) is on
+`PATH`. Without installing Nora, replace `nora` with `cargo run --quiet --`.
+The commands above use Unix paths; Windows executables end in `.exe`.
+
+With [just](https://github.com/casey/just) installed:
+
+```sh
+just demo          # compile and execute the example
+just ai            # print the reference to give an AI
+just check         # offline tests, lint, and benchmark fixtures
+just bench         # five Rust/Nora compatibility cases
+just setup-tokens  # optional tokenizer environment
+just tokens        # source syntax comparison
+just bench-ai      # THREE LIVE MODEL CALLS; requires authenticated Codex
+just graphs        # regenerate graph from committed pilot results
+```
+
+Run `just` for all recipes. The current main branch includes the AI guide and
+live benchmark added after v0.1.0. For the original release, check out `v0.1.0`.
+
+## Give an AI a precise contract
+
+Run `just ai` and supply its output with the task. The 151-token [primer](docs/ai-primer.md) teaches implemented syntax with examples
+and a Rust fallback. Load the [full reference](docs/ai-reference.md) only when
+you need repair details. [AGENTS.md](AGENTS.md) guides agents working on Nora
+itself. Include reference tokens when measuring a model's cost.
+
+The compiler embeds the guide, so it is available outside the repository:
+
+```sh
+nora --ai-reference       # display the short primer
+nora --ai-reference-full  # full grammar and repair reference
+nora --prompt task.txt    # emit the guide followed by your task
+```
+
+To inject it into a Codex CLI request:
+
+```sh
+nora --prompt task.txt > prompt.txt
+codex exec - < prompt.txt
+```
+
+This last command makes a real model call. The guide is ordinary prompt text,
+not a change to model weights. For API use, supply the reference as an instruction
+message and the task as user input. `just prompt task.txt` works from a checkout.
+The installed CLI must be rebuilt from current main for these post-v0.1.0 flags.
+
+```text
+Nora → parsing + type checking → Rust → rustc → native code
+```
+
+Compilation is deterministic and needs no AI model. Rust handles native code
+generation. For model development, correctness is the gate; token count selects
+among representations that preserve it.
+
+## Small syntax, explicit meaning
+
+| Nora | Meaning |
 | --- | --- |
-| `add(a,b:i)=a+b` | `fn add(a: i64, b: i64) -> i64 { a + b }` |
-| `text(x:i)=$x` | `fn text(x: i64) -> String { x.to_string() }` |
-| `scale(x:i)=x*100` | `fn scale(x: i64) -> i64 { x * 100 }` |
-| `identity(x:s)=x` | `fn identity(x: String) -> String { x }` |
-| `price(q,p,discount:i)=q*p-discount` | `fn price(q: i64, p: i64, discount: i64) -> i64 { q * p - discount }` |
+| `i` / `s` | Rust `i64` / owned `String` |
+| `add(a,b:i)=a+b` | Two integer parameters; inferred integer return |
+| `text(x:i)=$x` | Integer-to-string conversion |
+| `label(a,b:i)=$(a+b)` | Convert the sum, not one operand |
+| `identity(x:s)=x` | Move the string into the return value |
+| `text(x:i)->s=str(x)` | Equivalent explicit spelling |
 
-Explicit signatures are also supported:
-
-```text
-text(x:i)->s=str(x)
-add(a:i,b:i)->i=a+b
-```
-
-The compiler actually emits public functions with `nora_` names and `v_`
-parameter names to avoid Rust keyword collisions. For `text(x:i)=$x`:
+For `text(x:i)=$x`, Nora emits:
 
 ```rust
 pub fn nora_text(v_x: i64) -> String {
@@ -63,222 +148,71 @@ pub fn nora_text(v_x: i64) -> String {
 }
 ```
 
-## Install from source
+Generated functions use `nora_`; parameters use `v_` to avoid Rust keyword
+collisions. Function-only output is library source: compile with
+`rustc --edition=2024 --crate-type lib file.rs`.
+[Full syntax and limitations](docs/language.md).
 
-You need Git and a recent stable Rust toolchain with Cargo and edition 2024
-support. If Rust is not installed, follow [the Rust installation guide](https://www.rust-lang.org/tools/install).
-The Nora compiler has no third-party Rust dependencies.
+## Keep Rust available
 
-```sh
-git clone https://github.com/dominikpeter/nora.git
-cd nora
-cargo install --path .
-```
-
-This installs the `nora` executable in Cargo's binary directory, normally
-`~/.cargo/bin`. Make sure that directory is on your `PATH`.
-
-If you already have this repository checked out, run `cargo install --path .`
-from its root. You can also try everything without installing the executable
-by replacing `nora` with `cargo run --quiet --`.
-
-## Try it
-
-From the repository root, compile and run the included example:
-
-```sh
-mkdir -p target/demo
-nora examples/compact.nora > target/demo/compact.rs
-rustc --edition=2024 target/demo/compact.rs -o target/demo/compact
-./target/demo/compact
-```
-
-Expected output:
+A line containing `%%rust` switches the remainder of the file to verbatim Rust:
 
 ```text
-6
-```
-
-The commands above use a Unix-style shell. On Windows, run the generated
-`compact.exe` executable instead.
-
-The example combines compact Nora functions with a Rust entry point:
-
-```text
-text(x:i)=$x
-add(a,b:i)=a+b
+double(x:i)=x*2
 %%rust
 fn main() {
-    let values = [1, 2, 3];
-    let total: i64 = values.iter().sum();
-    assert_eq!(nora_add(total, 4), 10);
-    assert_eq!(nora_text(total), "6");
-    println!("{}", nora_text(total));
+    assert_eq!(nora_double(3), 6);
 }
 ```
 
-To inspect generated Rust without saving or compiling it:
+There is no closing delimiter. `.rs` files also pass through unchanged. Rust
+sections support ordinary Rust; compact expressions cannot yet call arbitrary
+Rust functions. Cargo still manages dependencies and build scripts. Nora does
+not yet implement a full Rust grammar or diagnostic source mapping.
+
+## A testable project
+
+The Programming Rust suite covers GCD, FIFO queues, generic ownership, interval
+ordering, and a compact data transformation. All five Rust references and five
+Nora fixtures pass. **Four Nora fixtures use Rust passthrough; only one uses
+compact Nora.** This is compatibility coverage, not model performance.
 
 ```sh
-nora examples/basic.nora
-```
-
-A file containing only compact functions produces library source. Compile it
-as a library, or add a Rust `main` as in the example above:
-
-```sh
-nora examples/basic.nora > target/demo/basic.rs
-rustc --edition=2024 --crate-type lib target/demo/basic.rs -o target/demo/libbasic.rlib
-```
-
-## Syntax today
-
-One compact function per line:
-
-```text
-name(parameter:type,...)->type=expression
-```
-
-| Construct | Meaning |
-| --- | --- |
-| `i` | Rust `i64` |
-| `s` | Owned Rust `String` |
-| `a,b:i` | Two integer parameters |
-| `->i`, `->s` | Explicit return type; optional when Nora can infer it |
-| `=expression` | Function body with an implicit return |
-| `$x` or `str(x)` | Convert an integer or string to a string |
-| `$(a+b)` | Convert the result of an expression to a string |
-| `+ - * / %` | Integer arithmetic |
-| `-x`, `(expression)` | Negation and grouping |
-
-Blank lines and whitespace are accepted. Identifiers use ASCII letters,
-digits, and underscores, and cannot begin with a digit.
-
-Multiplication, division, and remainder bind more tightly than addition and
-subtraction. Binary operators associate left to right. `$` binds at unary
-precedence: `$x+1` is a type error; use `$(x+1)` instead.
-
-Integer division truncates toward zero. Overflow and division by zero follow
-the generated Rust's behavior, including build-dependent overflow checks.
-Rust may reject invalid constant arithmetic during native compilation.
-
-Nora checks parameter references, arithmetic types, and declared return types.
-Errors include one-based line and column numbers. On a Nora compilation error,
-the CLI exits unsuccessfully and emits no Rust.
-
-## Rust compatibility and current limits
-
-A line containing `%%rust` ends compact parsing. Everything after that line is
-copied verbatim, with no closing delimiter. Use it for Rust functions, structs,
-traits, macros, modules, or a `main` function. Rust code can call generated
-`nora_` functions. The CLI also copies `.rs` files unchanged.
-
-This provides access to full Rust source; it does **not** mean Nora's compact
-syntax already covers the whole Rust language. Cargo still manages crates,
-dependencies, editions, and build scripts. Nora does not replace Cargo.
-
-Current limitations:
-
-- Compact functions do not yet support user function calls, string literals,
-  booleans, lists, loops, comments, imports, borrowing, or multiline bodies.
-- Compact expressions cannot yet call arbitrary Rust functions.
-- Errors in verbatim Rust and generated-name conflicts are diagnosed by `rustc`.
-  Mapping those errors back to Nora source is not implemented yet.
-- Integer literal magnitudes range from 0 to 9223372036854775807. The direct
-  minimum-i64 literal is not supported because negation follows literal parsing.
-
-## Token experiment
-
-For the five examples in the comparison table, joined with newlines:
-
-| Source form | Tokens |
-| --- | ---: |
-| Equivalent Rust shown above | 89 |
-| Original Nora with explicit signatures | 49 |
-| Current compact Nora | 41 |
-
-Both `o200k_base` and `cl100k_base`, measured with `tiktoken==0.13.0`, give these
-counts. That is **54% fewer source tokens than the Rust examples**, and **16%
-fewer than the original Nora syntax**. Other tokenizers and programs may differ.
-
-These counts exclude prompts, language instructions, reasoning, and repair
-attempts. The Rust baseline uses ordinary names, not the compiler's longer
-generated names. These are small syntax experiments, not evidence that Nora
-reduces the total cost of solving real programming tasks.
-
-To reproduce the measurements with Python installed:
-
-```sh
-python3 -m venv /tmp/nora-token-env
-/tmp/nora-token-env/bin/python -m pip install tiktoken==0.13.0
-/tmp/nora-token-env/bin/python scripts/count_tokens.py
-```
-
-The tokenizer is only needed for this experiment, not for compiling Nora.
-
-## Development
-
-With [just](https://github.com/casey/just) installed, run `just` to list commands:
-
-```sh
-just check         # tests, formatting, lint, and benchmark fixtures
-just demo          # compile and run the example
-just emit          # inspect generated Rust
-just bench         # benchmark fixtures and JSON report
-just setup-tokens  # install optional tokenizer into target/token-env
-just tokens        # compare syntax token counts
-just package       # verify a source package from a clean checkout
-```
-
-`just build`, `just install`, `just test`, `just lint`, and `just fmt` are also
-available. The demo and tokenizer-environment recipes use Unix paths. The
-underlying commands below work without just.
-
-
-```sh
+just check
+# Equivalent commands:
 cargo test
 cargo fmt --check
 cargo clippy --all-targets -- -D warnings
-```
-
-Tests compile generated Rust with `rustc` and execute it. They also check compact
-syntax equivalence, diagnostics, CLI failures, and Rust passthrough.
-
-- `src/lib.rs`: tokenizer, recursive-descent parser, type checks, and Rust emission.
-- `src/main.rs`: CLI file input and stdout output.
-- `examples/`: small Nora programs to try.
-- `scripts/count_tokens.py`: reproducible source-token comparison.
-
-The Rust library API is `nora::compile(&str) -> Result<String, String>`.
-There is no separate AST or optimization IR yet.
-
-Future iterations should expand useful Rust coverage and compare Nora against
-Rust on varied tasks with isolated runs, held-out tests, and repeated trials.
-Syntax changes should earn their place through measurable savings and reliable
-behavior.
-
-## References
-
-- [Build a Compiler from Scratch](https://blog.sylver.dev/build-a-compiler-from-scratch-part-0-introduction): iterative compiler construction.
-- [Dan Luu's language and token experiments](https://danluu.com/pl-tokens/): why source brevity alone does not establish lower agent cost.
-- [Cython](https://github.com/cython/cython): source-to-source compilation and ecosystem interoperability.
-- [Pythran](https://pythran.readthedocs.io/en/latest/) and [mypyc](https://mypyc.readthedocs.io/en/latest/): typed compilation approaches.
-
-These projects are references, not Nora dependencies.
-
-## Behavioral benchmarks
-
-Run the first benchmark suite:
-
-```sh
+python3 -m unittest discover -s scripts -p 'test_*.py'
 python3 scripts/bench_smoke.py
 ```
 
-It checks GCD, character queues, generic ownership, interval ordering, and a
-compact data transformation against independent assertions. Rust and Nora
-fixtures are scored separately. Four tasks currently require Rust passthrough;
-they test compatibility, not compact syntax savings. No AI model is called.
+Evaluator tests reject wrong arithmetic, broken FIFO ordering, wrong interval
+ordering, invalid source, disabled tests, and infinite loops. Reports go under
+`target/`. [Benchmark instructions and upstream licenses](benchmarks/programming-rust/README.md).
 
-See [benchmark instructions](benchmarks/programming-rust/README.md) for scoring
-model outputs, source provenance, failure tests, and the syntax-search protocol.
-See [release notes](docs/release-0.1.0.md) for scope and remaining limits.
+Live model runs execute generated native code locally; use an isolated disposable
+environment for untrusted outputs. Temporary directories are not a sandbox.
+
+## Iterate toward the goal
+
+1. Add a Rust behavior and independent correctness checks.
+2. Design compact syntax with deterministic expansion.
+3. Search spelling candidates using real tokenizer counts on complete programs.
+4. Freeze the guide/profile before testing unseen tasks and model trials.
+5. Keep improvements only when correctness holds and total coding cost improves.
+
+The original five syntax examples measured **89 Rust → 49 original Nora → 41
+compact Nora tokens** on both `o200k_base` and `cl100k_base`. Reproduce with
+`just setup-tokens && just tokens`. These are source-only measurements.
+
+Compiler: `src/lib.rs`. CLI: `src/main.rs`. Tests: `tests/` and `scripts/test_*.py`.
+Library API: `nora::compile(&str) -> Result<String, String>`.
+
+## References
+
+- [Programming Rust examples](https://github.com/ProgrammingRust/examples): pinned, licensed benchmark references.
+- [Gleam compiler and tests](https://github.com/gleam-lang/gleam/tree/main/test): a reference for compiler test organization; no Gleam code imported.
+- [Build a Compiler from Scratch](https://blog.sylver.dev/build-a-compiler-from-scratch-part-0-introduction): iterative compiler construction.
+- [Dan Luu's experiments](https://danluu.com/pl-tokens/): why source brevity does not establish lower agent cost.
+- [Cython](https://github.com/cython/cython), [Pythran](https://pythran.readthedocs.io/en/latest/), [mypyc](https://mypyc.readthedocs.io/en/latest/): compilation and interoperability references.

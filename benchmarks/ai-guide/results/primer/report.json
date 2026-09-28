@@ -1,0 +1,30 @@
+{
+  "kind": "live_model_pilot",
+  "trials_per_condition": 1,
+  "cli": "codex-cli 0.158.0",
+  "model_selection": "Codex default with user config ignored",
+  "task_sha256": "0429b0dcfbec07cd18c2775471c7860bc0282439e56bb1afb49db89912c61134",
+  "guide_sha256": "05acc3c62c539a0ba3d3c9741848bb017b7e66925b366bc2457a367698cbde41",
+  "guide_tokens_o200k_base": 151,
+  "results": [
+    {
+      "condition": "nora_with_guide",
+      "prompt_tokens_o200k_base": 355,
+      "source_tokens_o200k_base": 50,
+      "usage": [
+        {
+          "input_tokens": 19619,
+          "cached_input_tokens": 12288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 54,
+          "reasoning_output_tokens": 0
+        }
+      ],
+      "tool_events": 0,
+      "rust_escape": false,
+      "status": "pass",
+      "diagnostics": "\nrunning 5 tests\ntest guide_checks::bucket ... ok\ntest guide_checks::offset ... ok\ntest guide_checks::label ... ok\ntest guide_checks::identity ... ok\ntest guide_checks::total ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "elapsed_seconds": 8.32
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "kind": "live_model_pilot",
+  "trials_per_condition": 1,
+  "cli": "codex-cli 0.158.0",
+  "model_selection": "Codex default with user config ignored",
+  "task_sha256": "0429b0dcfbec07cd18c2775471c7860bc0282439e56bb1afb49db89912c61134",
+  "guide_sha256": "a268d38777512a0d37e65d0f371f08e7a9aa06b2653e926a8f8c3f3ba3bdef6f",
+  "guide_tokens_o200k_base": 505,
+  "results": [
+    {
+      "condition": "rust",
+      "prompt_tokens_o200k_base": 195,
+      "source_tokens_o200k_base": 131,
+      "usage": [
+        {
+          "input_tokens": 19445,
+          "cached_input_tokens": 12288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 135,
+          "reasoning_output_tokens": 0
+        }
+      ],
+      "tool_events": 0,
+      "rust_escape": false,
+      "status": "pass",
+      "diagnostics": "\nrunning 5 tests\ntest guide_checks::bucket ... ok\ntest guide_checks::identity ... ok\ntest guide_checks::label ... ok\ntest guide_checks::offset ... ok\ntest guide_checks::total ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "elapsed_seconds": 9.66
+    },
+    {
+      "condition": "nora_no_guide",
+      "prompt_tokens_o200k_base": 204,
+      "source_tokens_o200k_base": 126,
+      "usage": [
+        {
+          "input_tokens": 19454,
+          "cached_input_tokens": 12288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 604,
+          "reasoning_output_tokens": 472
+        }
+      ],
+      "tool_events": 0,
+      "rust_escape": false,
+      "status": "nora_failed",
+      "diagnostics": "line 1, column 43: unexpected character '{'\n",
+      "elapsed_seconds": 23.69
+    },
+    {
+      "condition": "nora_with_guide",
+      "prompt_tokens_o200k_base": 709,
+      "source_tokens_o200k_base": 55,
+      "usage": [
+        {
+          "input_tokens": 19961,
+          "cached_input_tokens": 12288,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 59,
+          "reasoning_output_tokens": 0
+        }
+      ],
+      "tool_events": 0,
+      "rust_escape": false,
+      "status": "pass",
+      "diagnostics": "\nrunning 5 tests\ntest guide_checks::bucket ... ok\ntest guide_checks::identity ... ok\ntest guide_checks::label ... ok\ntest guide_checks::total ... ok\ntest guide_checks::offset ... ok\n\ntest result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n",
+      "elapsed_seconds": 7.45
+    }
+  ]
+}
